@@ -6,17 +6,22 @@ from django.db.models import Q
 # Home - List Contacts
 def contact_list(request):
     query = request.GET.get('q')
+    category = request.GET.get('category', 'all')
+
+    contacts = Contact.objects.all()
+
     if query:
-        contacts = Contact.objects.filter(
+        contacts = contacts.filter(
             Q(name__icontains=query) | 
             Q(email__icontains=query) | 
             Q(phone__icontains=query)
         )
-    else:
-        contacts = Contact.objects.all()
     
-    return render(request, 'contacts/contact_list.html', {'contacts': contacts, 'query': query})
-    
+    if category and category != "all":
+        contacts = contacts.filter(category=category)
+
+    return render(request, 'contacts/contact_list.html', {'contacts': contacts, 'query': query, 'category': category})
+
 
 # Create Contact
 def add_contact(request):

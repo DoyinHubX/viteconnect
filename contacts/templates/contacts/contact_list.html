@@ -4,28 +4,41 @@
     <title>Contact List</title>
 </head>
 <body>
+
     <form method="GET" action="">
         <input type="text" name="q" placeholder="Search Contacts" value="{{ query }}">
         <button type="submit">Search</button>
     </form>
 
+    <h2>Filter by Category</h2>
+        <ul>
+            <li><a href="?category=all">All</a></li>
+            <li><a href="?category=family">Family</a></li>
+            <li><a href="?category=friends">Friends</a></li>
+            <li><a href="?category=work">Work</a></li>
+            <li><a href="?category=other">Other</a></li>
+        </ul>
+
     <h1>Contacts</h1>
-    
+
     <a href="{% url 'add_contact' %}">Add Contact</a>
     <ul>
-        {% for contact in contacts %}
-            <li>
-                {{ contact.name }} - {{ contact.phone }}
-                <a href="{% url 'edit_contact' contact.pk %}">Edit</a>
-                <form action="{% url 'delete_contact' contact.pk %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
-            </li>
-        {% endfor %}
+    {% for contact in contacts %}
+        <li>
+            {{ contact.name }} - {{ contact.phone }} ({{ contact.get_category_display }})
+            <a href="{% url 'edit_contact' contact.pk %}">Edit</a>
+            <form action="{% url 'delete_contact' contact.pk %}" method="POST" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
     </ul>
 </body>
 </html>
+
+
+
 
 
 
