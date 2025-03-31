@@ -4,7 +4,13 @@
     <title>Contact List</title>
 </head>
 <body>
+    <form method="GET" action="">
+        <input type="text" name="q" placeholder="Search Contacts" value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
     <h1>Contacts</h1>
+    
     <a href="{% url 'add_contact' %}">Add Contact</a>
     <ul>
         {% for contact in contacts %}
@@ -20,3 +26,7 @@
     </ul>
 </body>
 </html>
+
+
+
+
