@@ -82,17 +82,104 @@
         .back-link:hover {
             color: #1976D2;
         }
+
+        /* Add these new styles */
+        .contact-identifier {
+            text-align: center;
+            margin: 1rem 0 2rem;
+            font-size: 2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f5e9;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .profile-picture-preview {
+            display: block;
+            margin: 0 auto 1.5rem;
+            width: 120px;
+            height: 120px;
+            border: 2px solid #4CAF50;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input {
+            font-size: 1rem;
+            padding: 0.8rem 1.5rem;
+            background: #2196F3;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .file-input:hover {
+            background: #1976D2;
+        }
+
+        input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Update existing styles */
+        .form-group {
+            position: relative;
+        }
+
+        .help-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h1>{{ form.instance.pk|default:"Add" }} Contact</h1>
-        <form method="POST">
+        <h1 class="contact-identifier">Contact ID {{ form.instance.pk|default:"Add" }}</h1>
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            
+            <!-- Profile Picture Preview -->
+            {% if form.instance.profile_picture %}
+                <img src="{{ form.instance.profile_picture.url }}" 
+                     class="profile-picture-preview" 
+                     alt="Current profile picture">
+            {% endif %}
+                    
             {% for field in form %}
                 <div class="form-group">
                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
+                    
+                    {% if field.name == 'profile_picture' %}
+                        <!-- Custom File Input -->
+                        <div class="file-input-container">
+                            <span class="file-input">Choose File</span>
+                            {{ field }}
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    
                     {% if field.help_text %}
                         <small class="help-text">{{ field.help_text }}</small>
                     {% endif %}
@@ -105,5 +192,13 @@
         </form>
         <a href="{% url 'contact_list' %}" class="back-link">← Back to Contacts</a>
     </div>
+
+    <script>
+        // Add file name display for profile picture
+        document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || 'No file chosen';
+            document.querySelector('.file-input').textContent = fileName;
+        });
+    </script>
 </body>
 </html>

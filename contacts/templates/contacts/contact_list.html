@@ -213,6 +213,12 @@
             background: #2980b9;
         }
 
+        .contact-thumbnail {
+            border-radius: 50%;
+            margin-right: 1rem;
+            object-fit: cover;
+        }
+
         .contact-info {
             display: flex;
             align-items: center;
@@ -250,6 +256,13 @@
         {% for contact in contacts %}
             <li>
                 <div class="contact-info">
+                    {% if contact.profile_picture %}
+                        <img src="{{ contact.profile_picture.url }}" 
+                             class="contact-thumbnail" 
+                             alt="{{ contact.name }}"
+                             width="40"
+                             height="40">
+                    {% endif %}
                     <div>
                         <h3>{{ contact.name }}</h3>
                         <p>{{ contact.phone }} | {{ contact.get_category_display }}</p>
