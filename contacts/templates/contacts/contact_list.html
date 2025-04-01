@@ -7,39 +7,55 @@
 
     <form method="GET" action="">
         <input type="text" name="q" placeholder="Search Contacts" value="{{ query }}">
+        <!-- Add hidden input to preserve category -->
+        <input type="hidden" name="category" value="{{ category }}">
         <button type="submit">Search</button>
     </form>
 
-    <h2>Filter by Category</h2>
-        <ul>
-            <li><a href="?category=all">All</a></li>
-            <li><a href="?category=family">Family</a></li>
-            <li><a href="?category=friends">Friends</a></li>
-            <li><a href="?category=work">Work</a></li>
-            <li><a href="?category=other">Other</a></li>
-        </ul>
-
     <h1>Contacts</h1>
-
     <a href="{% url 'add_contact' %}">Add Contact</a>
+
+    <h2>Filter by Category</h2>
     <ul>
-    {% for contact in contacts %}
-        <li>
-            {{ contact.name }} - {{ contact.phone }} ({{ contact.get_category_display }})
-            <a href="{% url 'edit_contact' contact.pk %}">Edit</a>
-            <form action="{% url 'delete_contact' contact.pk %}" method="POST" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-    {% endfor %}
+        <!-- Include existing search query in category links -->
+        <li><a href="?category=all{% if query %}&q={{ query }}{% endif %}">All</a></li>
+        <li><a href="?category=family{% if query %}&q={{ query }}{% endif %}">Family</a></li>
+        <li><a href="?category=friends{% if query %}&q={{ query }}{% endif %}">Friends</a></li>
+        <li><a href="?category=work{% if query %}&q={{ query }}{% endif %}">Work</a></li>
+        <li><a href="?category=other{% if query %}&q={{ query }}{% endif %}">Other</a></li>
     </ul>
+
+    <ul>
+        {% for contact in contacts %}
+            <li>
+                {{ contact.name }} - {{ contact.phone }} ({{ contact.get_category_display }})
+                <a href="{% url 'edit_contact' contact.pk %}">Edit</a>
+                <form action="{% url 'delete_contact' contact.pk %}" method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </li>
+        {% empty %}
+            <li>No contacts found.</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Pagination Links -->
+    {% if contacts.paginator.num_pages > 1 %}
+        <div>
+            {% if contacts.has_previous %}
+                <a href="?page=1{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">First</a>
+                <a href="?page={{ contacts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}</span>
+
+            {% if contacts.has_next %}
+                <a href="?page={{ contacts.next_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">Next</a>
+                <a href="?page={{ contacts.paginator.num_pages }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">Last</a>
+            {% endif %}
+        </div>
+    {% endif %}
+
 </body>
 </html>
-
-
-
-
-
-
-

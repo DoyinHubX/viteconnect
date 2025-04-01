@@ -2,12 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Contact
 from .forms import ContactForm
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 # Home - List Contacts
 def contact_list(request):
     query = request.GET.get('q')
     category = request.GET.get('category', 'all')
-
     contacts = Contact.objects.all()
 
     if query:
@@ -16,11 +16,21 @@ def contact_list(request):
             Q(email__icontains=query) | 
             Q(phone__icontains=query)
         )
-    
+
     if category and category != "all":
         contacts = contacts.filter(category=category)
 
-    return render(request, 'contacts/contact_list.html', {'contacts': contacts, 'query': query, 'category': category})
+    # Pagination: Show 5 contacts per page
+    paginator = Paginator(contacts, 5)  
+    page_number = request.GET.get('page')
+    contacts_page = paginator.get_page(page_number)
+
+    return render(request, 'contacts/contact_list.html', {
+        'contacts': contacts_page,
+        'query': query,
+        'category': category
+    })
+
 
 
 # Create Contact
