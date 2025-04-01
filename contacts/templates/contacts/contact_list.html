@@ -1,23 +1,244 @@
+<!-- contact_list.html -->
 <!DOCTYPE html>
 <html>
 <head>
     <title>Contact List</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 80px; /* Offset for fixed navbar */
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            list-style: none;
+        }
+
+        .category-filter a {
+            padding: 0.5rem 1rem;
+            background: #e0e0e0;
+            border-radius: 20px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s;
+        }
+
+        .category-filter a:hover {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .contact-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .contact-list li {
+            background: white;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .contact-actions a {
+            color: #4CAF50;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-actions a:hover {
+            color: #45a049;
+        }
+
+        .contact-actions button {
+            padding: 0.5rem 1rem;
+            background: #ff4444;
+        }
+
+        .contact-actions button:hover {
+            background: #cc0000;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .pagination a {
+            padding: 0.5rem 1rem;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .pagination a:hover {
+            background: #45a049;
+        }
+
+        .add-contact {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .add-contact:hover {
+            background: #1976D2;
+        }
+        /* Navbar */
+        .navbar {
+            background: #2c3e50;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-content {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-grow: 1;
+            max-width: 800px;
+            margin: 0 2rem;
+        }
+
+
+        /* Modify existing header styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .search-form {
+            flex-grow: 1;
+            max-width: 500px;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .search-form input[type="text"] {
+            padding: 0.6rem;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        .search-form button {
+            padding: 0.6rem 1.2rem;
+            background: #3498db;
+            white-space: nowrap;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .search-form button:hover {
+            background: #2980b9;
+        }
+
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+    </style>
 </head>
 <body>
 
-    <form method="GET" action="">
-        <input type="text" name="q" placeholder="Search Contacts" value="{{ query }}">
-        <!-- Add hidden input to preserve category -->
-        <input type="hidden" name="category" value="{{ category }}">
-        <button type="submit">Search</button>
-    </form>
+    <nav class="navbar">
+        <a href="{% url 'contact_list' %}" class="nav-title">Contact Manager</a>
+        
+        <div class="nav-content">
+            <form class="search-form" method="GET" action="">
+                <input type="text" name="q" placeholder="Search Contacts" value="{{ query }}">
+                <input type="hidden" name="category" value="{{ category }}">
+                <button type="submit">Search</button>
+            </form>
+        </div>
 
-    <h1>Contacts</h1>
-    <a href="{% url 'add_contact' %}">Add Contact</a>
+        <a href="{% url 'add_contact' %}" class="add-contact">Add Contact</a>
+    </nav>
 
-    <h2>Filter by Category</h2>
-    <ul>
-        <!-- Include existing search query in category links -->
+
+    <h3>Filter by Category</h3></br>
+    <ul class="category-filter">
         <li><a href="?category=all{% if query %}&q={{ query }}{% endif %}">All</a></li>
         <li><a href="?category=family{% if query %}&q={{ query }}{% endif %}">Family</a></li>
         <li><a href="?category=friends{% if query %}&q={{ query }}{% endif %}">Friends</a></li>
@@ -25,24 +246,31 @@
         <li><a href="?category=other{% if query %}&q={{ query }}{% endif %}">Other</a></li>
     </ul>
 
-    <ul>
+    <ul class="contact-list">
         {% for contact in contacts %}
             <li>
-                {{ contact.name }} - {{ contact.phone }} ({{ contact.get_category_display }})
-                <a href="{% url 'edit_contact' contact.pk %}">Edit</a>
-                <form action="{% url 'delete_contact' contact.pk %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Delete</button>
-                </form>
+                <div class="contact-info">
+                    <div>
+                        <h3>{{ contact.name }}</h3>
+                        <p>{{ contact.phone }} | {{ contact.get_category_display }}</p>
+                    </div>
+                </div>
+
+                <div class="contact-actions">
+                    <a href="{% url 'edit_contact' contact.pk %}">Edit</a>
+                    <form action="{% url 'delete_contact' contact.pk %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
             </li>
         {% empty %}
             <li>No contacts found.</li>
         {% endfor %}
     </ul>
 
-    <!-- Pagination Links -->
     {% if contacts.paginator.num_pages > 1 %}
-        <div>
+        <div class="pagination">
             {% if contacts.has_previous %}
                 <a href="?page=1{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">First</a>
                 <a href="?page={{ contacts.previous_page_number }}{% if query %}&q={{ query }}{% endif %}{% if category %}&category={{ category }}{% endif %}">Previous</a>
@@ -56,6 +284,5 @@
             {% endif %}
         </div>
     {% endif %}
-
 </body>
 </html>

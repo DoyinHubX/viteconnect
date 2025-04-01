@@ -32,7 +32,6 @@ def contact_list(request):
     })
 
 
-
 # Create Contact
 def add_contact(request):
     if request.method == "POST":
