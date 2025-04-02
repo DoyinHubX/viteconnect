@@ -1,0 +1,12 @@
+coverage==7.6.8
+Django==4.2.13
+django-environ==0.10.0
+gunicorn==22.0.0
+pillow==11.0.0
+PyMySQL==1.0.3
+pytest==8.3.4
+pytest-cov==6.0.0
+pytest-django==4.9.0
+pytest-factoryboy==2.7.0
+requests==2.32.3
+WTForms==3.0.1
