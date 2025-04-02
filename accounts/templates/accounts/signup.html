@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up</title>
+    <style>
+        /* Same styles as login */
+        body {
+            background: #f5f5f5;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-top: 80px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 2rem;
+            padding-right: 3.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-top: .5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        button {
+            padding: 0.8rem 1.5rem;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .auth-links {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+        
+        .auth-links a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        
+        .errorlist {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            list-style: none;
+        }
+        
+        .helptext {
+            font-size: 0.9rem;
+            color: #666;
+            display: block;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'index' %}" class="nav-title">Back to homepage</a>
+        <div class="auth-links">
+            <a href="{% url 'login' %}">Already have an account? Login</a>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <h1>Sign Up</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <span class="helptext">{{ field.help_text }}</span>
+                {% endif %}
+                {% for error in field.errors %}
+                <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>

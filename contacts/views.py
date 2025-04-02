@@ -3,9 +3,23 @@ from .models import Contact
 from .forms import ContactForm
 from django.db.models import Q
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
-# Home - List Contacts
+# Homepage
+def index(request):
+    return render(request, 'contacts/index.html')
+
+
+# Profile page
+@login_required
+def profile(request):
+    contacts = Contact.objects.filter(user=request.user)
+    return render(request, 'contacts/profile.html', {'contacts': contacts})
+
+#List Contacts
+@login_required
 def contact_list(request):
+    contacts = Contact.objects.filter(user=request.user)
     query = request.GET.get('q')
     category = request.GET.get('category', 'all')
     contacts = Contact.objects.all()
@@ -33,11 +47,14 @@ def contact_list(request):
 
 
 # Create Contact
+@login_required
 def add_contact(request):
     if request.method == 'POST':
-        form = ContactForm(request.POST, request.FILES)  # Include request.FILES
+        form = ContactForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            contact = form.save(commit=False)
+            contact.user = request.user
+            contact.save()
             return redirect('contact_list')
     else:
         form = ContactForm()
@@ -64,3 +81,5 @@ def delete_contact(request, pk):
         contact.delete()
         return redirect('contact_list')
     return render(request, 'contacts/contact_confirm_delete.html', {'contact': contact})
+
+

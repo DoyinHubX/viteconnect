@@ -1,0 +1,66 @@
+{% extends "contacts/base.html" %}
+
+{% load static %}
+
+{% block title %}Your Profile - {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <a href="{% url 'add_contact' %}" class="add-contact-btn">+ Add New Contact</a>
+    </div>
+
+    <div class="contacts-summary">
+        <p>You have <strong>{{ contacts.count }}</strong> contact(s) in your address book.</p>
+    </div>
+
+    {% if contacts %}
+    <ul class="contact-list">
+        {% for contact in contacts %}
+        <li class="contact-card">
+            <div class="contact-info">
+                {% if contact.profile_picture %}
+                    <img src="{{ contact.profile_picture.url }}" 
+                         class="contact-avatar" 
+                         alt="{{ contact.name }}"
+                         width="60"
+                         height="60">
+                {% else %}
+                    <img src="{% static 'images/default-avatar.png' %}" 
+                         class="contact-avatar" 
+                         alt="Default Avatar"
+                         width="60"
+                         height="60">
+                {% endif %}
+                
+                <div class="contact-details">
+                    <h3>{{ contact.name }}</h3>
+                    <p class="contact-meta">
+                        <span class="phone">{{ contact.phone }}</span> | 
+                        <span class="category {{ contact.category }}">{{ contact.get_category_display }}</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="contact-actions">
+                <a href="{% url 'edit_contact' contact.pk %}" class="">Edit</a>
+                <form action="{% url 'delete_contact' contact.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty-state">
+        <p>You don't have any contacts yet.</p>
+        <a href="{% url 'add_contact' %}" class="add-contact-btn">Add Your First Contact</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+{% block footer %}{% endblock %}

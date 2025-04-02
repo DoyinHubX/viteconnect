@@ -1,0 +1,39 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}Contact Manager{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="{% url 'index' %}" class="nav-title">ViteConnect</a>
+        
+        <div class="nav-content">
+            {% block search_form %}
+            <form class="search-form" method="GET" action="">
+                <input type="text" name="q" placeholder="Search Contacts" value="{{ query }}">
+                <input type="hidden" name="category" value="{{ category }}">
+                <button type="submit">Search</button>
+            </form>
+            {% endblock %}
+        </div>
+
+        <div class="auth-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'contact_list' %}" class="auth-link">All Board's Contacts</a>
+                <a href="{% url 'logout' %}" class="auth-link">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="auth-link">Login</a>
+                <a href="{% url 'signup' %}" class="auth-link">Signup</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    {% block footer %} {% endblock %}
+
+</body>
+</html>

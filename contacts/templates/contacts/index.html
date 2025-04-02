@@ -1,0 +1,28 @@
+{% extends "contacts/base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1 class="hero-title">Welcome to Vite Connect</h1>
+        <p class="hero-subtitle">Organize, Manage, and Connect with Your Contacts Efficiently</p>
+        <div class="hero-actions">
+            <a href="{% url 'contact_list' %}" class="cta-button">View All Contacts</a>
+            <a href="{% url 'add_contact' %}" class="cta-button secondary">Add New Contact</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+    <footer class="site-footer">
+        <div class="footer-content">
+            <p>&copy; 2024 ViteConnect. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="{% url 'index' %}">Home</a>
+                <a href="https://github.com/DoyinHubX" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </footer>
+ {% endblock %}
